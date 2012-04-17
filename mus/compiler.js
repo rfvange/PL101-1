@@ -31,7 +31,7 @@ var endTime = function (time, expr) {
     case 'seq':
     return endTime(endTime(time, expr.left), expr.right);
 
-    case 'par': return Math.max(endTime(time, expr.left), endTime(time, expr.right));
+    case 'par':
     return Math.max(endTime(time, expr.left), endTime(time, expr.right));
 
     default :
