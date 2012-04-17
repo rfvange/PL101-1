@@ -83,7 +83,11 @@ var compile = function (expr) {
       }]);
 
       case 'rest':
-      return notes.concat([expr]);
+      return notes.concat([{
+        tag: 'rest',
+        start: start,
+        dur: expr.dur
+      }]);
 
     }
   };
