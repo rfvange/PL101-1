@@ -55,7 +55,8 @@ var compile = function (expr) {
       );
 
       case 'par':
-      return _compile(start, notes, expr.left).concat(_compile(start, [], expr.right));
+      return _compile(start, notes, expr.left)
+        .concat(_compile(start, [], expr.right));
 
       case 'repeat':
       for(var ii = 0 ; ii < expr.count ; ii++) {
@@ -64,19 +65,21 @@ var compile = function (expr) {
       return notes;
 
       case 'note':
-      return notes.concat([{
+      notes.push({
         tag: 'note',
         pitch: expr.pitch,
         start: start,
         dur: expr.dur
-      }]);
+      });
+      return notes;
 
       case 'rest':
-      return notes.concat([{
+      notes.push({
         tag: 'rest',
         start: start,
         dur: expr.dur
-      }]);
+      });
+      return notes;
 
     }
   };
@@ -109,7 +112,8 @@ var compileT = function (expr) {
       );
 
       case 'par':
-      return _compile(start, notes, expr.left).concat(_compile(start, [], expr.right));
+      return _compile(start, notes, expr.left)
+        .concat(_compile(start, [], expr.right));
 
       case 'repeat':
       for(var ii = 0 ; ii < expr.count ; ii++) {
@@ -118,15 +122,21 @@ var compileT = function (expr) {
       return notes;
 
       case 'note':
-      return notes.concat([{
+      notes.push({
         tag: 'note',
         pitch: convertPitch(expr.pitch),
         start: start,
         dur: expr.dur
-      }]);
+      });
+      return notes;
 
       case 'rest':
-      return notes.concat([expr]);
+      notes.push({
+        tag: 'rest',
+        start: start,
+        dur: expr.dur
+      });
+      return notes;
 
     }
   };
