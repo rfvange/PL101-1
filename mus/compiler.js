@@ -2,6 +2,10 @@ var isSeq = function (expr) {
   return expr.tag === 'seq';
 };
 
+var isPar = function (expr) {
+  return expr.tag === 'par';
+};
+
 var makeSeq = function (l_expr, r_expr) {
   return { tag: 'seq', left: l_expr, right: r_expr };
 };
@@ -31,6 +35,7 @@ var reverse = function (expr) {
 // should return the time when expr finishes."
 var endTime = function (time, expr) {
   if (isSeq(expr)) { return endTime(endTime(time, expr.left), expr.right); }
+  else if (isPar(expr)) { return Math.max(endTime(time, expr.left), endTime(time, expr.right)); }
   else { return expr.dur + time; }
 };
 
@@ -56,6 +61,9 @@ var compile = function (expr) {
         _compile(start, notes, expr.left),
         expr.right
       );
+
+      case 'par':
+      return _compile(start, notes, expr.left).concat(_compile(start, [], expr.right));
 
       case 'repeat':
       var seq = repeatToSeq(expr);
@@ -105,6 +113,9 @@ var compileT = function (expr) {
         _compile(start, notes, expr.left),
         expr.right
       );
+
+      case 'par':
+      return _compile(start, notes, expr.left).concat(_compile(start, [], expr.right));
 
       case 'repeat':
       var seq = repeatToSeq(expr);
