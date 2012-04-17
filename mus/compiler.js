@@ -34,6 +34,9 @@ var endTime = function (time, expr) {
     case 'par':
     return Math.max(endTime(time, expr.left), endTime(time, expr.right));
 
+    case 'repeat':
+    return time + expr.count*endTime(expr.section);
+
     default :
     return expr.dur + time;
 
