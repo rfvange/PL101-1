@@ -1,11 +1,3 @@
-var isSeq = function (expr) {
-  return expr.tag === 'seq';
-};
-
-var isPar = function (expr) {
-  return expr.tag === 'par';
-};
-
 var makeSeq = function (l_expr, r_expr) {
   return { tag: 'seq', left: l_expr, right: r_expr };
 };
@@ -26,7 +18,7 @@ var prelude = function (expr) {
 // order. Your function shouldn't modify the input, it should just return a
 // new reversed expression."
 var reverse = function (expr) {
-  if (!isSeq(expr)) { return expr; }
+  if (expr.tag !== 'seq') { return expr; }
   else { return makeSeq(reverse(expr.right), reverse(expr.left)); }
 };
 
@@ -34,9 +26,18 @@ var reverse = function (expr) {
 // MUS expression expr. Assuming expr starts playing at time time, the function
 // should return the time when expr finishes."
 var endTime = function (time, expr) {
-  if (isSeq(expr)) { return endTime(endTime(time, expr.left), expr.right); }
-  else if (isPar(expr)) { return Math.max(endTime(time, expr.left), endTime(time, expr.right)); }
-  else { return expr.dur + time; }
+  switch(expr.tag) {
+
+    case 'seq':
+    return endTime(endTime(time, expr.left), expr.right);
+
+    case 'par': return Math.max(endTime(time, expr.left), endTime(time, expr.right));
+    return Math.max(endTime(time, expr.left), endTime(time, expr.right));
+
+    default :
+    return expr.dur + time;
+
+  }
 };
 
 // Convert a 'repeat' into a 'seq'. Won't work if the repeat count is 1.
