@@ -40,15 +40,6 @@ var endTime = function (time, expr) {
   }
 };
 
-// Convert a 'repeat' into a 'seq'. Won't work if the repeat count is 1.
-var repeatToSeq = function (repeat) {
-  seq = makeSeq(repeat.section, repeat.section);
-  for(var ii = 0 ; ii < repeat.count - 2 ; ii++) {
-    seq = makeSeq(seq, repeat.section);
-  }
-  return seq;
-};
-
 // "Write a function compile that compiles MUS songs into NOTE songs."
 // Note : I assume 'rest' elemnts have a 'dur' field, not a 'duration' field.
 var compile = function (expr) {
@@ -67,12 +58,10 @@ var compile = function (expr) {
       return _compile(start, notes, expr.left).concat(_compile(start, [], expr.right));
 
       case 'repeat':
-      var seq = repeatToSeq(expr);
-      return _compile(
-        endTime(start, seq.left),
-        _compile(start, notes, seq.left),
-        seq.right
-      );
+      for(var ii = 0 ; ii < expr.count ; ii++) {
+        notes.push(expr.section);
+      }
+      return notes;
 
       case 'note':
       return notes.concat([{
@@ -123,12 +112,10 @@ var compileT = function (expr) {
       return _compile(start, notes, expr.left).concat(_compile(start, [], expr.right));
 
       case 'repeat':
-      var seq = repeatToSeq(expr);
-      return _compile(
-        endTime(start, seq.left),
-        _compile(start, notes, seq.left),
-        seq.right
-      );
+      for(var ii = 0 ; ii < expr.count ; ii++) {
+        notes.push(expr.section);
+      }
+      return notes;
 
       case 'note':
       return notes.concat([{
