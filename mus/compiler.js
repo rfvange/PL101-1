@@ -44,7 +44,7 @@ var endTime = function (time, expr) {
 };
 
 // "Write a function compile that compiles MUS songs into NOTE songs."
-// Note : I assume 'rest' elemnts have a 'dur' field, not a 'duration' field.
+// Note : I assume 'rest' elements have a 'dur' field, not a 'duration' field.
 var compile = function (expr) {
 
   var _compile = function (start, notes, expr) {
