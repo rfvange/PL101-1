@@ -1,0 +1,9 @@
+# mus
+
+> *“a working compiler for a simple music language”*
+
+Lesson 2: [Interpreters and Compilers](http://nathansuniversity.com/music.html)
+Homework: [Let's get this project started](http://nathansuniversity.com/projsetup.html)
+
+- `compiler.js`: compile MUS songs into NOTE songs
+- `compiler-mm.js`: same as `compiler.js` but implemented using [multimethods](http://krisjordan.com/multimethod-js)
