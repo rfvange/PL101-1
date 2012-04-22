@@ -1,0 +1,13 @@
+# scheem
+
+> *“a parser for Scheem, a simplified version of Scheme”*
+
+Links :
+
+- Lesson 3: [Parsing](http://nathansuniversity.com/pegs.html)
+- Homework: http://nathansuniversity.com/pegs8.html
+
+Files:
+
+- `scheem.pegjs`: PEG for the Scheem language
+- `test.js`: some simple tests to verify that the parser is correct
