@@ -24,5 +24,6 @@ fs.readFile('scheem.pegjs', 'ascii', function(err, data) {
       verify("'(quux)", ["quote", ["quux"]]);
       verify("(quux) ;; comment", ["quux"]);
       verify("(a\n;; comment\nb c)", ["a", "b", "c"]);
+      verify("(define factorial (lambda (n) (if (= n 0) 1 (* n (factorial (- n 1))))))", ["define", "factorial", ["lambda", ["n"], ["if", ["=", "n", "0"], "1", ["*", "n", ["factorial", ["-", "n", "1"]]]]]]);
     }
 });
