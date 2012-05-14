@@ -9,6 +9,13 @@ var evalScheem = function (expr, env) {
     }
     // Look at head of list for operation
     switch (expr[0]) {
+        case 'begin':
+            var result;
+            expr.shift();
+            for (var i in expr) {
+                result = evalScheem(expr[i], env);
+            }
+            return result;
         case 'define':
         case 'set!':
             env[expr[1]] = evalScheem(expr[2], env);
