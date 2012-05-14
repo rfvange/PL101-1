@@ -11,6 +11,15 @@ var evalScheem = function (expr, env) {
     switch (expr[0]) {
         case 'quote':
             return expr[1];
+        case 'cons':
+            var x = evalScheem(expr[2], env);
+            x.unshift(evalScheem(expr[1], env));
+            return x;
+        case 'car':
+            return expr[1][1][0];
+        case 'cdr':
+            expr[1][1].shift();
+            return expr[1][1];
         case 'begin':
             var result;
             expr.shift();
