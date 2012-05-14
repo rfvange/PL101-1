@@ -1,0 +1,74 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link rel="stylesheet"
+    href="http://nathansuniversity.com/css/mocha.css" />
+  <script src="./scheem.js" type="text/javascript"></script>
+  <script src=
+    "http://nathansuniversity.com/js/jquery-1.7.1.min.js">
+  </script>
+  <script src=
+    "http://nathansuniversity.com/js/chai.js">
+  </script>
+  <script src="http://nathansuniversity.com/js/mocha.js">
+  </script>
+  <script>mocha.setup('tdd')</script>
+  <script>
+
+var assert = chai.assert;
+
+// Some unit tests
+
+suite('quote', function() {
+    test('a number', function() {
+        assert.deepEqual(
+            evalScheem(['quote', 3], {}),
+            3
+        );
+    });
+    test('an atom', function() {
+        assert.deepEqual(
+            evalScheem(['quote', 'dog'], {}),
+            'dog'
+        );
+    });
+    test('a list', function() {
+        assert.deepEqual(
+            evalScheem(['quote', [1, 2, 3]], {}),
+            [1, 2, 3]
+        );
+    });
+});
+suite('add', function() {
+    test('two numbers', function() {
+        assert.deepEqual(
+            evalScheem(['+', 3, 5], {}),
+            8
+        );
+    });
+    test('a number and an expression', function() {
+        assert.deepEqual(
+            evalScheem(['+', 3, ['+', 2, 2]], {}),
+            7
+        );
+    });
+    test('two plus two equals four', function() {
+        assert.deepEqual(
+            evalScheem(['+', 2, 2], {}),
+            4
+        );
+    });
+});
+
+  </script>
+  <script>
+    $(function(){
+      mocha.run();
+    });
+  </script>
+</head>
+<body>
+  <div id="mocha"></div>
+</body>
+</html>

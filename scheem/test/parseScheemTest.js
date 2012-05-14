@@ -2,7 +2,7 @@ var peg = require('pegjs');
 var assert = require('assert');
 var fs = require('fs');
 
-fs.readFile('scheem.pegjs', 'ascii', function(err, data) {
+fs.readFile('../scheem.pegjs', 'ascii', function(err, data) {
     if(err !== null) {
       console.log(err);
     } else {
