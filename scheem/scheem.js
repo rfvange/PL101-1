@@ -9,6 +9,8 @@ var evalScheem = function (expr, env) {
     }
     // Look at head of list for operation
     switch (expr[0]) {
+        case 'quote':
+            return expr[1];
         case 'begin':
             var result;
             expr.shift();
