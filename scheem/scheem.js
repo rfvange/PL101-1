@@ -42,6 +42,9 @@ var evalScheem = function (expr, env) {
                       evalScheem(expr[2], env));
             if (gt) return '#t';
             return '#f';
+        case 'if':
+            if(evalScheem(expr[1]) === '#t') return evalScheem(expr[2]);
+            return evalScheem(expr[3]);
         case 'define':
         case 'set!':
             env[expr[1]] = evalScheem(expr[2], env);
