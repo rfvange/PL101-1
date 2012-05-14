@@ -26,7 +26,6 @@ var evalScheem = function (expr, env) {
         case '-':
             return evalScheem(expr[1], env) -
                    evalScheem(expr[2], env);
-            
         case '*':
             return evalScheem(expr[1], env) *
                    evalScheem(expr[2], env);
