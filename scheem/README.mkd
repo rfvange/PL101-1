@@ -5,9 +5,12 @@
 Links :
 
 - Lesson 3: [Parsing](http://nathansuniversity.com/pegs.html)
-- Homework: http://nathansuniversity.com/pegs8.html
+- Lesson 4: [Scheem Interpreter](http://www.nathansuniversity.com/scheem.html)
 
 Files:
 
 - `scheem.pegjs`: PEG for the Scheem language
-- `test.js`: some simple tests to verify that the parser is correct
+- `scheem.js`: interpreter for the Scheem language
+- *test*
+ - `simpletest.html`: browser unit-testing for the interpreter
+ - `parseScheemTest.js`: command-line parser tests
