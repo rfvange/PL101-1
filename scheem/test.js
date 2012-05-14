@@ -1,5 +1,5 @@
 var peg = require('pegjs');
-var should = require('should');
+var assert = require('assert');
 var fs = require('fs');
 
 fs.readFile('scheem.pegjs', 'ascii', function(err, data) {
@@ -10,7 +10,7 @@ fs.readFile('scheem.pegjs', 'ascii', function(err, data) {
 
       var verify = function(code, expected) {
         console.log("Verifying: " + code);
-        should.deepEqual(parse(code), expected);
+        assert.deepEqual(parse(code), expected);
       }
 
       verify("42", "42");
