@@ -2,7 +2,8 @@ start        =  expr
 
 expr         =  _* e:scheem_expr _*                { return e; }
 
-scheem_expr  =  "'" e:expr                         { return ["quote", e]; }
+scheem_expr  = n:[0-9]+                            { return parseInt(n.join('')); }
+             / "'" e:expr                          { return ["quote", e]; }
              /  x:symbol                           { return x; }
              /  xs:list                            { return xs; }
 
