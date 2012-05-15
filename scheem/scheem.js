@@ -16,6 +16,9 @@ var evalScheem = function (expr, env) {
             x.unshift(evalScheem(expr[1], env));
             return x;
         case 'car':
+            if (expr[1][1].length < 1) {
+                throw new Error("can't take the car of the empty list");
+            }
             return expr[1][1][0];
         case 'cdr':
             expr[1][1].shift();
