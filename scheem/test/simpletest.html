@@ -193,6 +193,11 @@ suite('arithmetic', function() {
                 7
             );
         });
+        test('a dog and a cat', function() {
+            assert.throws(function() {
+                evalScheem(['+', 'dog', 'cat'], {});
+            });
+        });
     });
     suite('substract', function() {
         test('two numbers', function() {
@@ -206,6 +211,11 @@ suite('arithmetic', function() {
                 evalScheem(['-', 3, ['-', 3, 2]], {}),
                 2
             );
+        });
+        test('a dog and a cat', function() {
+            assert.throws(function() {
+                evalScheem(['-', 'dog', 'cat'], {});
+            });
         });
     });
     suite('multiply', function() {
@@ -221,6 +231,11 @@ suite('arithmetic', function() {
                 12
             );
         });
+        test('a dog and a cat', function() {
+            assert.throws(function() {
+                evalScheem(['*', 'dog', 'cat'], {});
+            });
+        });
     });
     suite('divide', function() {
         test('two numbers', function() {
@@ -234,6 +249,11 @@ suite('arithmetic', function() {
                 evalScheem(['/', 12, ['/', 24, 2]], {}),
                 1
             );
+        });
+        test('a dog and a cat', function() {
+            assert.throws(function() {
+                evalScheem(['/', 'dog', 'cat'], {});
+            });
         });
     });
 

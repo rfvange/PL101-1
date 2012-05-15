@@ -61,17 +61,32 @@ var evalScheem = function (expr, env) {
             env[expr[1]] = evalScheem(expr[2], env);
             return 0;
         case '+':
-            return evalScheem(expr[1], env) +
-                   evalScheem(expr[2], env);
+            var operands = ensureNumeric(expr, env);
+            return operands[0] + operands[1];
         case '-':
-            return evalScheem(expr[1], env) -
-                   evalScheem(expr[2], env);
+            var operands = ensureNumeric(expr, env);
+            return operands[0] - operands[1];
         case '*':
-            return evalScheem(expr[1], env) *
-                   evalScheem(expr[2], env);
+            var operands = ensureNumeric(expr, env);
+            return operands[0] * operands[1];
         case '/':
-            return evalScheem(expr[1], env) /
-                   evalScheem(expr[2], env);
+            var operands = ensureNumeric(expr, env);
+            return operands[0] / operands[1];
     }
 };
+
+// Ensure that expr has 2 numeric operands
+var ensureNumeric = function(expr, env) {
+    var isNumeric = function(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+    var e1 = evalScheem(expr[1], env);
+    var e2 = evalScheem(expr[2], env);
+    if (isNumeric(e1) && isNumeric(e2)) {
+        return [e1, e2];
+    } else {
+        throw new Error("can't do arithmetic without numeric values");
+    }
+}
 
