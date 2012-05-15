@@ -21,6 +21,9 @@ var evalScheem = function (expr, env) {
             }
             return expr[1][1][0];
         case 'cdr':
+            if (expr[1][1].length < 1) {
+                throw new Error("can't take the cdr of the empty list");
+            }
             expr[1][1].shift();
             return expr[1][1];
         case 'begin':
