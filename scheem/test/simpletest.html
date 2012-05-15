@@ -171,25 +171,72 @@ suite('cdr', function() {
         expect(evalScheem(['cdr', ['quote', [[1, 2], 3]]], {})).to.eql([3]);
     });
 });
-suite('add', function() {
-    test('two numbers', function() {
-        assert.deepEqual(
-            evalScheem(['+', 3, 5], {}),
-            8
-        );
+suite('if', function() {
+    test('(if (= 2 2) 1 0) is 1', function() {
+        expect(evalScheem(['if', ['=', 2, 2], 1, 0], {})).to.eql(1);
     });
-    test('a number and an expression', function() {
-        assert.deepEqual(
-            evalScheem(['+', 3, ['+', 2, 2]], {}),
-            7
-        );
+    test('(if (= 2 3) 1 0) is 0', function() {
+        expect(evalScheem(['if', ['=', 2, 3], 1, 0], {})).to.eql(0);
     });
-    test('two plus two equals four', function() {
-        assert.deepEqual(
-            evalScheem(['+', 2, 2], {}),
-            4
-        );
+});
+suite('arithmetic', function() {
+    suite('add', function() {
+        test('two numbers', function() {
+            assert.deepEqual(
+                evalScheem(['+', 3, 5], {}),
+                8
+            );
+        });
+        test('a number and an expression', function() {
+            assert.deepEqual(
+                evalScheem(['+', 3, ['+', 2, 2]], {}),
+                7
+            );
+        });
     });
+    suite('substract', function() {
+        test('two numbers', function() {
+            assert.deepEqual(
+                evalScheem(['-', 3, 5], {}),
+                -2
+            );
+        });
+        test('a number and an expression', function() {
+            assert.deepEqual(
+                evalScheem(['-', 3, ['-', 3, 2]], {}),
+                2
+            );
+        });
+    });
+    suite('multiply', function() {
+        test('two numbers', function() {
+            assert.deepEqual(
+                evalScheem(['*', 3, 5], {}),
+                15
+            );
+        });
+        test('a number and an expression', function() {
+            assert.deepEqual(
+                evalScheem(['*', 3, ['*', 2, 2]], {}),
+                12
+            );
+        });
+    });
+    suite('divide', function() {
+        test('two numbers', function() {
+            assert.deepEqual(
+                evalScheem(['/', 3, 6], {}),
+                0.5
+            );
+        });
+        test('a number and an expression', function() {
+            assert.deepEqual(
+                evalScheem(['/', 12, ['/', 24, 2]], {}),
+                1
+            );
+        });
+    });
+
 });
 
   </script>
