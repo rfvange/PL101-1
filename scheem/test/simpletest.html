@@ -126,6 +126,11 @@ suite('>', function() {
     });
 });
 suite('cons', function() {
+    test("consing onto something that isn't a list is illegal", function () {
+        expect(
+            function () { evalScheem(['cons', 1, 2]); }
+        ).to.throw(Error, "can only cons onto lists");
+    });
     test("consing 1 onto the empty list gives '(1)", function() {
         evalScheem(['cons', 1, ['quote', []]], {}),
         [1]
@@ -173,12 +178,14 @@ suite('cdr', function() {
 });
 suite('if', function() {
     test('(if (= 2 2) 1) is illegal', function() {
-    assert.throws(
-        function () { evalScheem(['if', ['=', 2, 2], 1], {}) });
+        expect(
+            function () { evalScheem(['if', ['=', 2, 2], 1], {}) }
+        ).to.throw(Error, "illegal 'if' expression");
     });
     test('(if (= 2 2) 1 0 2) is illegal', function() {
-    assert.throws(
-        function () { evalScheem(['if', ['=', 2, 2], 1, 0, 2], {}) });
+        expect(
+            function () { evalScheem(['if', ['=', 2, 2], 1, 0, 2], {}) }
+        ).to.throw(Error, "illegal 'if' expression");
     });
     test('(if (= 2 2) 1 0) is 1', function() {
         expect(evalScheem(['if', ['=', 2, 2], 1, 0], {})).to.eql(1);
