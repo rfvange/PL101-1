@@ -43,10 +43,15 @@ var evalScheem = function (expr, env) {
             if (gt) return '#t';
             return '#f';
         case 'if':
-            if(evalScheem(expr[1]) === '#t') return evalScheem(expr[2]);
+            if (evalScheem(expr[1]) === '#t') return evalScheem(expr[2]);
             return evalScheem(expr[3]);
         case 'define':
+            env[expr[1]] = evalScheem(expr[2], env);
+            return 0;
         case 'set!':
+            if (env[expr[1]] === undefined) {
+                throw new Error("can't set undefined variables");
+            }
             env[expr[1]] = evalScheem(expr[2], env);
             return 0;
         case '+':
