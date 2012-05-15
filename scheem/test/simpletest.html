@@ -172,6 +172,14 @@ suite('cdr', function() {
     });
 });
 suite('if', function() {
+    test('(if (= 2 2) 1) is illegal', function() {
+    assert.throws(
+        function () { evalScheem(['if', ['=', 2, 2], 1], {}) });
+    });
+    test('(if (= 2 2) 1 0 2) is illegal', function() {
+    assert.throws(
+        function () { evalScheem(['if', ['=', 2, 2], 1, 0, 2], {}) });
+    });
     test('(if (= 2 2) 1 0) is 1', function() {
         expect(evalScheem(['if', ['=', 2, 2], 1, 0], {})).to.eql(1);
     });

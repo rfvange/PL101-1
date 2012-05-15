@@ -49,6 +49,9 @@ var evalScheem = function (expr, env) {
             if (gt) return '#t';
             return '#f';
         case 'if':
+            if (expr.length !== 4) { 
+                throw new Error("illegal 'if' expression");
+            }
             if (evalScheem(expr[1]) === '#t') return evalScheem(expr[2]);
             return evalScheem(expr[3]);
         case 'define':
