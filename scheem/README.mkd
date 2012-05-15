@@ -13,4 +13,3 @@ Files:
 - `scheem.js`: interpreter for the Scheem language
 - *test*
  - `simpletest.html`: browser unit-testing for the interpreter
- - `parseScheemTest.js`: command-line parser tests
