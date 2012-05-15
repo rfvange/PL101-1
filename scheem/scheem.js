@@ -13,6 +13,9 @@ var evalScheem = function (expr, env) {
             return expr[1];
         case 'cons':
             var x = evalScheem(expr[2], env);
+            if (Object.prototype.toString.call(x) !== '[object Array]') {
+                throw new Error("can only cons onto lists");
+            }
             x.unshift(evalScheem(expr[1], env));
             return x;
         case 'car':
