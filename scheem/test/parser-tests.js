@@ -1,3 +1,5 @@
+var expect = chai.expect;
+
 var prs = Scheem.parse;
 
 suite('PARSER', function () {
