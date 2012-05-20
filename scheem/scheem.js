@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-var evalScheem = function (expr, env) {
-    // Numbers evaluate to themselves
-    if (typeof expr === 'number') {
-        return expr;
-    }
-    // Strings are variable references
-    if (typeof expr === 'string') {
-        return env[expr];
-=======
 var lookup = function (env, v) {
     if (env === undefined) {
       throw new Error('environment is undefined');
@@ -56,14 +46,11 @@ var evalScheem = function (expr, env) {
     }
     if (typeof expr === 'string') {
         return evalScheem(lookup(env, expr), env);
->>>>>>> master
     }
     // Look at head of list for operation
     switch (expr[0]) {
         case 'quote':
             return expr[1];
-<<<<<<< HEAD
-=======
         case 'let-one':
             var bnds = { };
             bnds[expr[1]] = expr[2];
@@ -75,7 +62,6 @@ var evalScheem = function (expr, env) {
                 var newenv = { bindings: bnd, outer: env };
                 return evalScheem(expr[2], newenv);
             };
->>>>>>> master
         case 'cons':
             var x = evalScheem(expr[2], env);
             if (Object.prototype.toString.call(x) !== '[object Array]') {
@@ -120,18 +106,6 @@ var evalScheem = function (expr, env) {
             if (expr.length !== 4) { 
                 throw new Error("illegal 'if' expression");
             }
-<<<<<<< HEAD
-            if (evalScheem(expr[1]) === '#t') return evalScheem(expr[2]);
-            return evalScheem(expr[3]);
-        case 'define':
-            env[expr[1]] = evalScheem(expr[2], env);
-            return 0;
-        case 'set!':
-            if (env[expr[1]] === undefined) {
-                throw new Error("can't set undefined variables");
-            }
-            env[expr[1]] = evalScheem(expr[2], env);
-=======
             if (evalScheem(expr[1], env) === '#t') {
               return evalScheem(expr[2], env);
             }
@@ -144,7 +118,6 @@ var evalScheem = function (expr, env) {
                 throw new Error("can't set undefined variables");
             }
             update(env, expr[1], evalScheem(expr[2], env));
->>>>>>> master
             return 0;
         case '+':
             var operands = ensureNumeric(expr, env);
@@ -158,11 +131,8 @@ var evalScheem = function (expr, env) {
         case '/':
             var operands = ensureNumeric(expr, env);
             return operands[0] / operands[1];
-<<<<<<< HEAD
-=======
         default: // function application
             return evalScheem(expr[0], env)(evalScheem(expr[1], env));
->>>>>>> master
     }
 };
 

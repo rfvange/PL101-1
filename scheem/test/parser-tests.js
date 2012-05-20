@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 var expect = chai.expect;
 
->>>>>>> master
 var prs = Scheem.parse;
 
 suite('PARSER', function () {
