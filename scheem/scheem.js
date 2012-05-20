@@ -6,6 +6,7 @@ var lookup = function (env, v) {
   if(env.bindings === undefined) {
     return undefined;
   }
+
   if (env.bindings.hasOwnProperty(v)) {
     return env.bindings[v];
   } else {
