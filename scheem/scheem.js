@@ -1,16 +1,67 @@
+var lookup = function (env, v) {
+    if (env === undefined) {
+      throw new Error('environment is undefined');
+    }
+
+    if(env.bindings === undefined) {
+      return undefined;
+    }
+    if (env.bindings.hasOwnProperty(v)) {
+        return env.bindings[v];
+    } else {
+      return lookup(env.outer, v);
+    }
+};
+
+var update = function (env, v, val) {
+    if (env === undefined) {
+      throw new Error('environment is undefined');
+    }
+
+    if(env.bindings.hasOwnProperty(v)) {
+        env.bindings[v] = val;
+    } else {
+        update(env.outer, v, val);
+    }
+};
+
+var add_binding = function (env, v, val) {
+    if (env === undefined) {
+      throw new Error('environment is undefined');
+    }
+
+    if (env === {}) {
+      env = { bindings: {}, outer: {} };
+    }
+    env.bindings[v] = val;
+};
+
 var evalScheem = function (expr, env) {
-    // Numbers evaluate to themselves
+    if (env === undefined) {
+      throw new Error('environment is undefined');
+    }
+
     if (typeof expr === 'number') {
         return expr;
     }
-    // Strings are variable references
     if (typeof expr === 'string') {
-        return env[expr];
+        return evalScheem(lookup(env, expr), env);
     }
     // Look at head of list for operation
     switch (expr[0]) {
         case 'quote':
             return expr[1];
+        case 'let-one':
+            var bnds = { };
+            bnds[expr[1]] = expr[2];
+            return evalScheem(expr[3], { bindings: bnds, outer: env });
+        case 'lambda-one':
+            return function (arg) {
+                var bnd = { };
+                bnd[expr[1]] = arg;
+                var newenv = { bindings: bnd, outer: env };
+                return evalScheem(expr[2], newenv);
+            };
         case 'cons':
             var x = evalScheem(expr[2], env);
             if (Object.prototype.toString.call(x) !== '[object Array]') {
@@ -55,16 +106,18 @@ var evalScheem = function (expr, env) {
             if (expr.length !== 4) { 
                 throw new Error("illegal 'if' expression");
             }
-            if (evalScheem(expr[1]) === '#t') return evalScheem(expr[2]);
-            return evalScheem(expr[3]);
+            if (evalScheem(expr[1], env) === '#t') {
+              return evalScheem(expr[2], env);
+            }
+            return evalScheem(expr[3], env);
         case 'define':
-            env[expr[1]] = evalScheem(expr[2], env);
+            add_binding(env, expr[1], evalScheem(expr[2], env));
             return 0;
         case 'set!':
-            if (env[expr[1]] === undefined) {
+            if (lookup(env, expr[1]) === undefined) {
                 throw new Error("can't set undefined variables");
             }
-            env[expr[1]] = evalScheem(expr[2], env);
+            update(env, expr[1], evalScheem(expr[2], env));
             return 0;
         case '+':
             var operands = ensureNumeric(expr, env);
@@ -78,6 +131,8 @@ var evalScheem = function (expr, env) {
         case '/':
             var operands = ensureNumeric(expr, env);
             return operands[0] / operands[1];
+        default: // function application
+            return evalScheem(expr[0], env)(evalScheem(expr[1], env));
     }
 };
 
