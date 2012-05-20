@@ -14,14 +14,22 @@ var lookup = function (env, v) {
   }
 };
 
-var update = function (env, v, val) {
+var fixEnv = function (env) {
   if (env === undefined) {
     throw new Error('environment is undefined');
   }
 
-  if (env === {}) {
-    env = { bindings: {}, outer: {} };
+  if (!env.hasOwnProperty('bindings')) {
+    env.bindings = {};
   }
+
+  if (!env.hasOwnProperty('outer')) {
+    env.outer = {};
+  }
+}
+
+var update = function (env, v, val) {
+  fixEnv(env);
 
   if (env.bindings.hasOwnProperty(v)) {
     env.bindings[v] = val;
@@ -31,13 +39,8 @@ var update = function (env, v, val) {
 };
 
 var add_binding = function (env, v, val) {
-  if (env === undefined) {
-    throw new Error('environment is undefined');
-  }
+  fixEnv(env);
 
-  if (env === {}) {
-    env = { bindings: {}, outer: {} };
-  }
   env.bindings[v] = val;
 };
 
