@@ -18,7 +18,7 @@ var update = function (env, v, val) {
     throw new Error('environment is undefined');
   }
 
-  if(env.bindings.hasOwnProperty(v)) {
+  if (env.bindings.hasOwnProperty(v)) {
     env.bindings[v] = val;
   } else {
     update(env.outer, v, val);
