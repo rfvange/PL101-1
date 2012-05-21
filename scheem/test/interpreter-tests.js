@@ -90,21 +90,41 @@ suite('INTERPRETER', function() {
       expect(evalScheem(['quote', [1, 2, 3]], make_env())).to.eql([1, 2, 3]);
     });
   });
-  suite('let-one', function() {
-    test('let-one takes 3 arguments', function() {
+  suite('let', function() {
+    test('let takes 2 arguments', function() {
       expect(function() {
-        evalScheemString('(let-one x (+ x 2))', make_env());
-      }).to.throw(Error, "illegal 'let-one' expression");
+        evalScheemString('(let ((x 3)))', make_env());
+      }).to.throw(Error, "illegal 'let' expression");
     });
-    test('a number', function() {
+    test('let-bind a number', function() {
       expect(
-        evalScheemString('(let-one x 3 (+ x 2))', make_env())
+        evalScheemString('(let ((x 3)) (+ x 2))', make_env())
       ).to.eql(5);
     });
-    test('an expression', function() {
+    test('let-bind an expression', function() {
       expect(
-        evalScheemString('(let-one exp (+ 3 4) (* 7 exp))', make_env())
+        evalScheemString('(let ((exp (+ 3 4))) (* 7 exp))', make_env())
       ).to.eql(49);
+    });
+    test('let-bind 2 numbers', function() {
+      expect(
+        evalScheemString("(let ((u 3) (v 5)) (+ u v))", make_env())
+      ).to.eql(8);
+    });
+   test('let-bind 2 expressions', function() {
+      expect(
+        evalScheemString("(let ((r (+ 1 2)) (s (+ 3 4))) (+ r s))", make_env())
+      ).to.eql(10);
+    });
+    test('let-bind a number and an expression', function() {
+      expect(
+        evalScheemString("(let ((r 1) (s (+ 1 2))) (+ r s))", make_env())
+      ).to.eql(4);
+    });
+    test('let-bind a value and reuse it in the same let', function() {
+      expect(
+        evalScheemString("(let ((x 1) (y x)) (+ y x))", make_env())
+      ).to.eql(2);
     });
   });
   suite('lambda', function() {
