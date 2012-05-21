@@ -11,6 +11,10 @@ var make_env = function(bindings, outer) {
   return { bindings: bindings, outer: outer };
 };
 
+var evalScheemString = function (str, env) {
+  return evalScheem(Scheem.parse(str), env);
+}
+
 suite('INTERPRETER', function() {
   suite('retrieving values', function() {
     test('x', function() {
@@ -84,6 +88,47 @@ suite('INTERPRETER', function() {
     });
     test('a list', function() {
       expect(evalScheem(['quote', [1, 2, 3]], make_env())).to.eql([1, 2, 3]);
+    });
+  });
+  suite('let-one', function() {
+    test('let-one takes 3 arguments', function() {
+      expect(function() {
+        evalScheemString('(let-one x (+ x 2))', make_env());
+      }).to.throw(Error, "illegal 'let-one' expression");
+    });
+    test('a number', function() {
+      expect(
+        evalScheemString('(let-one x 3 (+ x 2))', make_env())
+      ).to.eql(5);
+    });
+    test('an expression', function() {
+      expect(
+        evalScheemString('(let-one exp (+ 3 4) (* 7 exp))', make_env())
+      ).to.eql(49);
+    });
+  });
+  suite('lambda-one', function() {
+    test('lambda-one takes 2 arguments', function() {
+      expect(function() {
+        evalScheemString('(lambda-one (+ z 42))', make_env());
+      }).to.throw(Error, "illegal 'lambda-one' expression")
+    });
+    test("lambda-one returns a function when successful", function() {
+      expect(
+        evalScheemString('(lambda-one a (+ 1 a))', make_env())
+      ).a('Function');
+    });
+    test("lambda-one is callable", function() {
+      expect(
+        evalScheemString('((lambda-one w (* w 2)) 4)', make_env())
+      ).to.eql(8);
+    });
+    test("lambda-one is definable, and callable once defined", function() {
+      expect(
+        evalScheemString(
+          '(begin (define square (lambda-one s (* s s))) (square 4))'
+        , make_env())
+      ).to.eql(16);
     });
   });
   suite('=', function() {

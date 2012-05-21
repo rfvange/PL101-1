@@ -53,17 +53,23 @@ var evalScheem = function (expr, env) {
     return expr;
   }
   if (typeof expr === 'string') {
-    return evalScheem(lookup(env, expr), env);
+    return lookup(env, expr);
   }
   // Look at head of list for operation
   switch (expr[0]) {
   case 'quote':
     return expr[1];
   case 'let-one':
+    if (expr.length !== 4) {
+      throw new Error("illegal 'let-one' expression");
+    }
     var bnds = { };
-    bnds[expr[1]] = expr[2];
+    bnds[expr[1]] = evalScheem(expr[2], env);
     return evalScheem(expr[3], { bindings: bnds, outer: env });
   case 'lambda-one':
+    if (expr.length !== 3) {
+      throw new Error("illegal 'lambda-one' expression");
+    }
     return function (arg) {
       var bnd = { };
       bnd[expr[1]] = arg;
@@ -111,7 +117,7 @@ var evalScheem = function (expr, env) {
     if (gt) return '#t';
     return '#f';
   case 'if':
-    if (expr.length !== 4) { 
+    if (expr.length !== 4) {
       throw new Error("illegal 'if' expression");
     }
     if (evalScheem(expr[1], env) === '#t') {
@@ -158,4 +164,3 @@ var ensureNumeric = function(expr, env) {
     throw new Error("can't do arithmetic without numeric values");
   }
 }
-
