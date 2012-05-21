@@ -59,13 +59,18 @@ var evalScheem = function (expr, env) {
   switch (expr[0]) {
   case 'quote':
     return expr[1];
-  case 'let-one':
-    if (expr.length !== 4) {
-      throw new Error("illegal 'let-one' expression");
+  case 'let':
+    if (expr.length !== 3) {
+      throw new Error("illegal 'let' expression");
     }
-    var bnds = { };
-    bnds[expr[1]] = evalScheem(expr[2], env);
-    return evalScheem(expr[3], { bindings: bnds, outer: env });
+    var bnds = {};
+    for (var i in expr[1]) {
+      bnds[expr[1][i][0]] = evalScheem(
+        expr[1][i][1],
+        { bindings: bnds, outer: env }
+      );
+    }
+    return evalScheem(expr[2], { bindings: bnds, outer: env });
   case 'lambda':
     if (expr.length !== 3) {
       throw new Error("illegal 'lambda' expression");
