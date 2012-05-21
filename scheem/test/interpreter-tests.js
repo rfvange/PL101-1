@@ -205,6 +205,65 @@ suite('INTERPRETER', function() {
         , make_env())
       ).to.eql(1);
     });
+    test("chain calls to the same function", function() {
+      expect(
+        evalScheemString(
+          '(begin (define dbl (lambda (x) (* 2 x))) (dbl (dbl 1)))'
+        , make_env())
+      ).to.eql(4);
+    });
+    test("pass a function as a value to another function", function() {
+      expect(
+        evalScheemString(
+          '(begin'
+          + '(define f (lambda (x) (* x 2)))'
+          + '(define g (lambda (fn x) (fn x)))'
+          + '(g f 4))'
+        , make_env())
+      ).to.eql(8);
+    });
+    test("inner function uses value from enclosing function", function() {
+      expect(
+        evalScheemString(
+          '((lambda (x) ((lambda (y) (+ x y)) 2)) 1)'
+        , make_env())
+      ).to.eql(3);
+    });
+    test("argument to a function shadows a global variable", function() {
+      expect(
+        evalScheemString(
+          '(begin (define x 0) ((lambda (x) x) 1))'
+        , make_env())
+      ).to.eql(1);
+    });
+    test("a function modifies a global variable", function() {
+      expect(
+        evalScheemString('(begin ((lambda () (set! x 1))) x)', make_env({x:0}))
+      ).to.eql(1);
+    });
+    test("a function modifies a variable in the outer function", function() {
+      fail();
+    });
+    test("an outer function returns an inner function", function() {
+      expect(
+        evalScheemString(
+          '(((lambda () (lambda () 42))))'
+        , make_env())
+      ).to.eql(42);
+    });
+    test("an outer function returns an inner function,"
+        + "inner function refers to outer function", function() {
+      fail();
+    });
+    test("define a recursive function", function() {
+      expect(
+        evalScheemString(
+          '(begin '
+          + '(define f (lambda (x) (if (= 0 x) 1 (* x (f (- x 1))))))'
+          + '(f 10))'
+        , make_env())
+      ).to.eql(3628800);
+    });
   });
   suite('=', function() {
     test('2 is not equal to 3', function() {
