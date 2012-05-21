@@ -120,20 +120,20 @@ suite('INTERPRETER', function() {
     });
   });
   suite('function application', function() {
-    test('call an existing function', function() {
+    test('call an existing function of arity 1', function() {
       var env = make_env(
-        {square: evalScheemString('(lambda-one x (* x x))', make_env())}
+        {square: function (x) {return x*x;}}
       );
       expect(
         evalScheemString('(square 10)', env)
       ).to.eql(100);
     });
-    test("call an anonymous function", function() {
+    test("call an anonymous function of arity 1", function() {
       expect(
         evalScheemString('((lambda-one w (* w 2)) 4)', make_env())
       ).to.eql(8);
     });
-    test("define a function and call it", function() {
+    test("define a function of arity 1 and call it", function() {
       expect(
         evalScheemString(
           '(begin (define square (lambda-one s (* s s))) (square 4))'
