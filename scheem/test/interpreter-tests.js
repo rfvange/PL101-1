@@ -107,15 +107,15 @@ suite('INTERPRETER', function() {
       ).to.eql(49);
     });
   });
-  suite('lambda-one', function() {
-    test('lambda-one takes 2 arguments', function() {
+  suite('lambda', function() {
+    test('lambda takes 2 arguments', function() {
       expect(function() {
-        evalScheemString('(lambda-one (+ z 42))', make_env());
-      }).to.throw(Error, "illegal 'lambda-one' expression")
+        evalScheemString('(lambda (+ z 42))', make_env());
+      }).to.throw(Error, "illegal 'lambda' expression")
     });
-    test("lambda-one returns a function when successful", function() {
+    test("lambda returns a function when successful", function() {
       expect(
-        evalScheemString('(lambda-one a (+ 1 a))', make_env())
+        evalScheemString('(lambda a (+ 1 a))', make_env())
       ).a('Function');
     });
   });
@@ -149,17 +149,41 @@ suite('INTERPRETER', function() {
         evalScheemString('(plus 11 13)', env)
       ).to.eql(24);
     });
+    test("call an anonymous function of arity 0", function() {
+      expect(
+        evalScheemString("((lambda () (+ 5 7)))", make_env())
+      ).to.eql(12);
+    });
     test("call an anonymous function of arity 1", function() {
       expect(
-        evalScheemString('((lambda-one w (* w 2)) 4)', make_env())
+        evalScheemString('((lambda (w) (* w 2)) 4)', make_env())
       ).to.eql(8);
+    });
+    test("call an anonymous function of arity 2", function() {
+      expect(
+        evalScheemString("((lambda (a b) (* a b)) 5 7)", make_env())
+      ).to.eql(35);
+    });
+    test("define a function of arity 0 and call it", function() {
+      expect(
+        evalScheemString(
+          '(begin (define always0 (lambda () (+ 77 23))) (always0))'
+        , make_env())
+      ).to.eql(100);
     });
     test("define a function of arity 1 and call it", function() {
       expect(
         evalScheemString(
-          '(begin (define square (lambda-one s (* s s))) (square 4))'
+          '(begin (define square (lambda (s) (* s s))) (square 4))'
         , make_env())
       ).to.eql(16);
+    });
+    test("define a function of arity 2 and call it", function() {
+      expect(
+        evalScheemString(
+          '(begin (define minus (lambda (u v) (- u v))) (minus 4 3))'
+        , make_env())
+      ).to.eql(1);
     });
   });
   suite('=', function() {

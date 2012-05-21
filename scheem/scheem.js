@@ -66,15 +66,16 @@ var evalScheem = function (expr, env) {
     var bnds = { };
     bnds[expr[1]] = evalScheem(expr[2], env);
     return evalScheem(expr[3], { bindings: bnds, outer: env });
-  case 'lambda-one':
+  case 'lambda':
     if (expr.length !== 3) {
-      throw new Error("illegal 'lambda-one' expression");
+      throw new Error("illegal 'lambda' expression");
     }
-    return function (arg) {
-      var bnd = { };
-      bnd[expr[1]] = arg;
-      var newenv = { bindings: bnd, outer: env };
-      return evalScheem(expr[2], newenv);
+    return function () {
+      var bnds = {};
+      for (var i in expr[1]) {
+        bnds[expr[1][i]] = arguments[i];
+      }
+      return evalScheem(expr[2], { bindings: bnds, outer: env });
     };
   case 'cons':
     var x = evalScheem(expr[2], env);
