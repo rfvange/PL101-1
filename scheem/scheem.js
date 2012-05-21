@@ -146,7 +146,13 @@ var evalScheem = function (expr, env) {
     var operands = ensureNumeric(expr, env);
     return operands[0] / operands[1];
   default: // function application
-    return evalScheem(expr[0], env)(evalScheem(expr[1], env));
+    var fn = evalScheem(expr[0], env);
+    if (fn === undefined) {
+      throw Error('unknown function: ' + expr[0]);
+    }
+    expr.shift();
+    expr.map( function (e) { return evalScheem(e, env); } );
+    return fn.apply(null, expr);
   }
 };
 

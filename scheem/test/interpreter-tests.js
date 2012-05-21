@@ -120,6 +120,19 @@ suite('INTERPRETER', function() {
     });
   });
   suite('function application', function() {
+    test('unknown functions are reported', function() {
+      expect(function() {
+        evalScheemString('(not-a-function)', make_env());
+      }).to.throw(Error, 'unknown function:');
+    });
+    test('call an existing function of arity 0', function() {
+      var env = make_env(
+        {always42: function () {return 42;}}
+      );
+      expect(
+        evalScheemString('(always42)', env)
+      ).to.eql(42);
+    });
     test('call an existing function of arity 1', function() {
       var env = make_env(
         {square: function (x) {return x*x;}}
@@ -127,6 +140,14 @@ suite('INTERPRETER', function() {
       expect(
         evalScheemString('(square 10)', env)
       ).to.eql(100);
+    });
+    test('call an existing function of arity 2', function() {
+      var env = make_env(
+        {plus: function (x, y) {return x+y;}}
+      );
+      expect(
+        evalScheemString('(plus 11 13)', env)
+      ).to.eql(24);
     });
     test("call an anonymous function of arity 1", function() {
       expect(
