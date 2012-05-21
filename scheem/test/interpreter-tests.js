@@ -111,7 +111,7 @@ suite('INTERPRETER', function() {
         evalScheemString("(let ((u 3) (v 5)) (+ u v))", make_env())
       ).to.eql(8);
     });
-   test('let-bind 2 expressions', function() {
+    test('let-bind 2 expressions', function() {
       expect(
         evalScheemString("(let ((r (+ 1 2)) (s (+ 3 4))) (+ r s))", make_env())
       ).to.eql(10);
