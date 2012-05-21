@@ -118,12 +118,22 @@ suite('INTERPRETER', function() {
         evalScheemString('(lambda-one a (+ 1 a))', make_env())
       ).a('Function');
     });
-    test("lambda-one is callable", function() {
+  });
+  suite('function application', function() {
+    test('call an existing function', function() {
+      var env = make_env(
+        {square: evalScheemString('(lambda-one x (* x x))', make_env())}
+      );
+      expect(
+        evalScheemString('(square 10)', env)
+      ).to.eql(100);
+    });
+    test("call an anonymous function", function() {
       expect(
         evalScheemString('((lambda-one w (* w 2)) 4)', make_env())
       ).to.eql(8);
     });
-    test("lambda-one is definable, and callable once defined", function() {
+    test("define a function and call it", function() {
       expect(
         evalScheemString(
           '(begin (define square (lambda-one s (* s s))) (square 4))'
